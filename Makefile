@@ -2,9 +2,9 @@ W        = -Wall
 OPT      = -O2 -g
 STD      = -std=c++17
 CXXFLAGS = $(STD) $(OPT) $(W) -fPIC $(XCXXFLAGS)
-INCS     = -Iinclude -Iexternal -Iexternal/json/include
+INCS     = -Iinclude -Iexternal -Iexternal/hoytech-cpp -Iexternal/json/include
 
-LDLIBS   = -lfido2 -lssl -lcrypto
+LDLIBS   = -lfido2 -lssl -lcrypto -ldocopt
 LDFLAGS  = -flto $(XLDFLAGS)
 
 SRCS     = main.cpp

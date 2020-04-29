@@ -1,0 +1,2 @@
+git submodule update --init
+sudo apt install libfido2-dev libdocopt-dev

@@ -1,0 +1,6 @@
+[submodule "external/json"]
+	path = external/json
+	url = https://github.com/taocpp/json.git
+[submodule "external/hoytech-cpp"]
+	path = external/hoytech-cpp
+	url = https://github.com/hoytech/hoytech-cpp.git
