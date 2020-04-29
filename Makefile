@@ -8,7 +8,7 @@ LDLIBS   = -lfido2 -lssl -lcrypto -ldocopt
 LDFLAGS  = -flto $(XLDFLAGS)
 
 SRCS     = main.cpp
-CMDSRCS  = cmd_init.cpp
+CMDSRCS  = cmd_list.cpp cmd_init.cpp
 
 BIN      = f2sc
 
