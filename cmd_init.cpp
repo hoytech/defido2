@@ -14,13 +14,6 @@ extern "C" {
 
 #include "util.h"
 
-//FIXME kill
-extern "C" {
-#include <openssl/ec.h>
-#include <openssl/evp.h>
-#include <openssl/pem.h>
-#include <fido/es256.h>
-}
 
 namespace f2sc {
 
@@ -87,26 +80,6 @@ void cmd_init(const std::vector<std::string> &subArgs) {
 
     std::cout << "cred id: " << hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(fido_cred_id_ptr(cred)), fido_cred_id_len(cred)), true) << std::endl;
     std::cout << "pub key: " << hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(fido_cred_pubkey_ptr(cred)), fido_cred_pubkey_len(cred)), true) << std::endl;
-
-    auto *ptr = fido_cred_pubkey_ptr(cred);
-    auto len = fido_cred_pubkey_len(cred);
-
-//FIXME kill
-        EVP_PKEY *pkey = nullptr;
-        es256_pk_t *pk = nullptr;
-        int ok = -1;
-
-        if ((pk = es256_pk_new()) == NULL) {
-        }
-
-        if (es256_pk_from_ptr(pk, ptr, len) != FIDO_OK) {
-        }
-
-        if ((pkey = es256_pk_to_EVP_PKEY(pk)) == NULL) {
-        }
-
-        if (PEM_write_PUBKEY(::stdout, pkey) == 0) {
-        }
 }
 
 

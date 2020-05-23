@@ -6,6 +6,7 @@
 
 extern "C" {
 #include <fido.h>
+#include <cbor.h>
 }
 
 #include <docopt/docopt.h>
@@ -72,7 +73,23 @@ void cmd_sign(const std::vector<std::string> &subArgs) {
 
 
     for (size_t idx = 0; idx < fido_assert_count(assert); idx++) {
-        std::cout << "auth: " << hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(fido_assert_authdata_ptr(assert, idx)), fido_assert_authdata_len(assert, idx)), true) << std::endl;
+
+        const unsigned char *authdata_cbor_ptr = fido_assert_authdata_ptr(assert, idx);
+        size_t authdata_cbor_len = fido_assert_authdata_len(assert, idx);
+
+        cbor_item_t *item = NULL;
+        unsigned char *authdata_ptr = NULL;
+        size_t authdata_len;
+        struct cbor_load_result cbor;
+
+        cbor_load(authdata_cbor_ptr, authdata_cbor_len, &cbor);
+
+        item = cbor_load(authdata_cbor_ptr, authdata_cbor_len, &cbor);
+
+        authdata_ptr = cbor_bytestring_handle(item);
+        authdata_len = cbor_bytestring_length(item);
+
+        std::cout << "auth: " << hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(authdata_ptr), authdata_len), true) << std::endl;
         std::cout << "sig:  " << hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(fido_assert_sig_ptr(assert, idx)), fido_assert_sig_len(assert, idx)), true) << std::endl;
     }
 }

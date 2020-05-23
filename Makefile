@@ -4,7 +4,7 @@ STD      = -std=c++17
 CXXFLAGS = $(STD) $(OPT) $(W) -fPIC $(XCXXFLAGS)
 INCS     = -Iinclude -Iexternal -Iexternal/hoytech-cpp -Iexternal/json/include
 
-LDLIBS   = -lfido2 -lssl -lcrypto -ldocopt
+LDLIBS   = -lfido2 -lcbor -lssl -lcrypto -ldocopt
 LDFLAGS  = -flto $(XLDFLAGS)
 
 SRCS     = main.cpp external/hoytech-cpp/hex.cpp
