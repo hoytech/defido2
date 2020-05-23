@@ -7,8 +7,8 @@ INCS     = -Iinclude -Iexternal -Iexternal/hoytech-cpp -Iexternal/json/include
 LDLIBS   = -lfido2 -lssl -lcrypto -ldocopt
 LDFLAGS  = -flto $(XLDFLAGS)
 
-SRCS     = main.cpp
-CMDSRCS  = cmd_list.cpp cmd_init.cpp
+SRCS     = main.cpp external/hoytech-cpp/hex.cpp
+CMDSRCS  = cmd_list.cpp cmd_init.cpp cmd_sign.cpp
 
 BIN      = f2sc
 

@@ -13,6 +13,7 @@ namespace f2sc {
 
 void cmd_init(const std::vector<std::string> &subArgs);
 void cmd_list(const std::vector<std::string> &subArgs);
+void cmd_sign(const std::vector<std::string> &subArgs);
 
 }
 
@@ -28,6 +29,7 @@ R"(
     Commands:
       list       Lists available keys
       init       Inits a key
+      sign       Signs a message
 )";
 
 
@@ -43,6 +45,8 @@ int parse_command_line(int argc, char **argv) {
         f2sc::cmd_list(args["<args>"].asStringList());
     } else if (command == "init") {
         f2sc::cmd_init(args["<args>"].asStringList());
+    } else if (command == "sign") {
+        f2sc::cmd_sign(args["<args>"].asStringList());
     } else {
         throw hoytech::error("unrecognized command");
     }
