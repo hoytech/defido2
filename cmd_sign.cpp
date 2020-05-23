@@ -16,7 +16,7 @@ extern "C" {
 #include "util.h"
 
 
-namespace f2sc {
+namespace defido2 {
 
 
 static const char USAGE[] =

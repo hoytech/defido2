@@ -10,7 +10,7 @@ LDFLAGS  = -flto $(XLDFLAGS)
 SRCS     = main.cpp external/hoytech-cpp/hex.cpp
 CMDSRCS  = cmd_list.cpp cmd_init.cpp cmd_sign.cpp
 
-BIN      = f2sc
+BIN      = defido2
 
 
 
