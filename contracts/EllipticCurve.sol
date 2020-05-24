@@ -358,7 +358,7 @@ contract EllipticCurve {
     /**
      * @dev Validate combination of message, signature, and public key.
      */
-    function validateSignature(bytes32 message, uint[2] memory rs, uint[2] memory Q) public pure
+    function validateSignature(bytes32 message, uint[2] memory rs, uint[2] memory Q) internal pure
         returns (bool)
     {
 
