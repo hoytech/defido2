@@ -14,9 +14,9 @@ contract Defido2 is EllipticCurve {
         bytes32 messageHash = keccak256(abi.encodePacked(auth, to, data));
 
         require(!seenMessages[messageHash], "message already invoked");
-        seenMessages[messageHash] = true;
-
         require(validateSignature(messageHash, sig, pubKey), "invalid signature");
+
+        seenMessages[messageHash] = true;
 
         (bool success,) = to.call(data);
         require(success, "tx failed");
