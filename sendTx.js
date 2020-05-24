@@ -26,6 +26,8 @@ if (cmd === 'deploy') {
     ethBalance();
 } else if (cmd === 'ethDeposit') {
     ethDeposit();
+} else if (cmd === 'uniswapGetPair') {
+    uniswapGetPair();
 } else if (cmd === 'erc20info') {
     erc20info();
 } else if (cmd === 'invoke') {
@@ -100,6 +102,25 @@ async function ethDeposit() {
     console.error(`Tx mined in block ${result.blockNumber} (${result.blockHash})`);
 }
 
+
+
+async function uniswapGetPair() {
+    let token1 = process.argv[4];
+    let token2 = process.argv[5];
+
+    const abi = [
+        'function getPair(address tokenA, address tokenB) view returns (address)',
+    ];
+
+    let provider = new ethers.providers.JsonRpcProvider();
+    let contract = new ethers.Contract("0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", abi, provider);
+
+    let output = {};
+
+    output.addr = await contract.getPair(token1, token2);
+
+    console.log(output);
+}
 
 
 async function erc20info() {

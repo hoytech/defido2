@@ -21,6 +21,7 @@ void cmd_erc20(const std::vector<std::string> &subArgs);
 
 void cmd_aave(const std::vector<std::string> &subArgs);
 void cmd_compound(const std::vector<std::string> &subArgs);
+void cmd_uniswap(const std::vector<std::string> &subArgs);
 
 
 
@@ -42,8 +43,9 @@ R"(
       sign       Signs a message
       eth        ETH operations
       erc20      ERC20 operations
-      aave       AAVE operations
       compound   Compound operations
+      uniswap    Uniswap operations
+      aave       AAVE operations
 )";
 
 
@@ -84,10 +86,12 @@ int parse_command_line(int argc, char **argv) {
         defido2::cmd_eth(args["<args>"].asStringList());
     } else if (command == "erc20") {
         defido2::cmd_erc20(args["<args>"].asStringList());
-    } else if (command == "aave") {
-        defido2::cmd_aave(args["<args>"].asStringList());
     } else if (command == "compound") {
         defido2::cmd_compound(args["<args>"].asStringList());
+    } else if (command == "uniswap") {
+        defido2::cmd_uniswap(args["<args>"].asStringList());
+    } else if (command == "aave") {
+        defido2::cmd_aave(args["<args>"].asStringList());
     } else {
         throw hoytech::error("unrecognized command");
     }
