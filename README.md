@@ -1,6 +1,6 @@
 # defido2
 
-defido2 is a smart-contract based ethereum wallet. The wallet's key material is stored on special-purpose tamper-resistant devices known as FIDO2 or U2F keys. All signature operations are performed on the key itself.
+defido2 is a command-line contract-based ethereum wallet intended for DeFi (decentralised finance) use-cases. The wallet's key material is stored on special-purpose tamper-resistant devices known as FIDO2 or U2F keys. All signature operations are performed on the key itself.
 
 FIDO2 keys are cheap and common, since they are being heavily promoted by google/twitter/github/etc for webauthn, second-factor logins. Additionally, OpenSSH now supports FIDO2 devices for password-free logins.
 
@@ -58,3 +58,10 @@ Send a transaction (permit uniswap to access your wallet's DAI):
     Invoking method to=0x6B175474E89094C44Da98b954EedeAC495271d0F value=0x0000000000000000000000000000000000000000000000000000000000000000 payload=0x095ea7b3000000000000000000000000f164fc0ec4e93095b804a4795bbe1e041497b92affffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     Sent tx: 0x0b392d220de4ec1af0b74c2d745789f4e6ca2f9e56c5e01b2db4566257df6893
     Tx mined in block 10131095 (0x95efeaaebb8b5b4beac06b39d78112689a44030ab1133da1973c85566897cbc9)
+
+
+## Future work
+
+* More DeFi integrations!
+* Since FIDO2 uses secp256r1 signatures, they are expensive to verify within solidity. Each transaction uses about a million gas to verify the signature, which is very expensive and should be improved somehow.
+* Currently we call out to javascript to do some of the JSON-RPC communication. Eventually we'll move the rest of this into C++ and use websockets to talk to the ethereum nodes (this is mostly done in another private project, just need to port it over).
