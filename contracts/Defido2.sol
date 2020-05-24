@@ -13,15 +13,15 @@ contract Defido2 is EllipticCurve, BaseRelayRecipient {
 
     receive() external payable { }
 
-    function invoke(address to, bytes memory payload, bytes memory auth, uint[2] memory sig) public {
-        bytes32 messageHash = sha256(abi.encodePacked(auth, sha256(abi.encodePacked(to, payload))));
+    function invoke(address to, uint value, bytes memory payload, bytes memory auth, uint[2] memory sig) public {
+        bytes32 messageHash = sha256(abi.encodePacked(auth, sha256(abi.encodePacked(to, value, payload))));
 
         require(!seenMessages[messageHash], "message already invoked");
         require(validateSignature(messageHash, sig, pubKey), "invalid signature");
 
         seenMessages[messageHash] = true;
 
-        (bool success,) = to.call(payload);
-        require(success, "tx failed");
+        (bool success, bytes memory returndata) = to.call{ value: value }(payload);
+        require(success, string(returndata));
     }
 }

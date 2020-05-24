@@ -57,6 +57,12 @@ static inline mpz_class convertToMpzTwosComplement(std::string_view str) {
 }
 
 
+static inline std::string parseEther(std::string ether) {
+    mpf_class valuef = mpf_class{ether} * mpz_class{"1000000000000000000"};
+    mpz_class valuez = mpz_class{floor(valuef)};
+    return hoytech::to_hex(numberNormalize(valuez, 32), true);
+}
+
 
 
 class Encoder {

@@ -43,12 +43,14 @@ void cmd_erc20(const std::vector<std::string> &subArgs) {
         e.addUint256("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         std::string payload = e.finish();
 
-        std::string to = hoytech::from_hex(args["<token>"].asString());
+        std::string toHex = args["<token>"].asString();
+        std::string valueHex = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
-        auto sig = sign(to + payload);
+        auto sig = sign(SolidityAbi::numberNormalize(toHex, 20) + SolidityAbi::numberNormalize(valueHex, 32) + payload);
 
-        std::string cmd = "doSend ";
-        cmd += hoytech::to_hex(to, true) + " ";
+        std::string cmd = "invoke ";
+        cmd += toHex + " ";
+        cmd += valueHex + " ";
         cmd += hoytech::to_hex(payload, true) + " ";
         cmd += hoytech::to_hex(sig.auth, true) + " ";
         cmd += hoytech::to_hex(sig.sig1, true) + " ";

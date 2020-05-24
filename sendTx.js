@@ -20,14 +20,16 @@ if (!config.privKey) throw("no privkey added");
 
 if (cmd === 'deploy') {
     deploy();
+} else if (cmd === 'senderAddr') {
+    senderAddr();
 } else if (cmd === 'ethBalance') {
     ethBalance();
 } else if (cmd === 'ethDeposit') {
     ethDeposit();
 } else if (cmd === 'erc20info') {
     erc20info();
-} else if (cmd === 'doSend') {
-    doSend();
+} else if (cmd === 'invoke') {
+    invoke();
 } else {
     throw("unrecognized command: " + cmd);
 }
@@ -50,6 +52,16 @@ async function deploy() {
     let factory = new ethers.ContractFactory(contracts.defido2Abi, contracts.defido2Bin, wallet);
     let defido2Contract = await factory.deploy(pubKeySplit, { gasLimit: 6000000, });
     console.log(defido2Contract.address);
+}
+
+
+
+async function senderAddr() {
+    let wallet = new ethers.Wallet(config.privKey);
+    let provider = new ethers.providers.JsonRpcProvider();
+    wallet = wallet.connect(provider);
+
+    console.log(wallet.address);
 }
 
 
@@ -117,15 +129,16 @@ async function erc20info() {
 
 
 
-async function doSend() {
+async function invoke() {
     let to = process.argv[4];
-    let payload = process.argv[5];
-    let auth = process.argv[6];
-    let sig1 = process.argv[7];
-    let sig2 = process.argv[8];
+    let value = process.argv[5];
+    let payload = process.argv[6];
+    let auth = process.argv[7];
+    let sig1 = process.argv[8];
+    let sig2 = process.argv[9];
 
     const walletAbi = [
-        'function invoke(address to, bytes payload, bytes auth, uint[2] sig)',
+        'function invoke(address to, uint value, bytes payload, bytes auth, uint[2] sig)',
     ];
 
     let wallet = new ethers.Wallet(config.privKey);
@@ -133,9 +146,9 @@ async function doSend() {
     wallet = wallet.connect(provider);
 
     let contract = new ethers.Contract(config.walletAddr, walletAbi, wallet);
-    console.error(`Invoking method to=${to} payload=${payload}`);
+    console.error(`Invoking method to=${to} value=${value} payload=${payload}`);
 
-    let tx = await contract.invoke(to, payload, auth, [sig1, sig2], { gasLimit: 6000000, }); // FIXME: gasLimit because ganache takes too long to estimateGas
+    let tx = await contract.invoke(to, value, payload, auth, [sig1, sig2], { gasLimit: 6000000, }); // FIXME: gasLimit because ganache takes too long to estimateGas
     console.error(`Sent tx: ${tx.hash}`);
 
     let result = await tx.wait();
