@@ -36,15 +36,21 @@ void cmd_erc20(const std::vector<std::string> &subArgs) {
         auto info = tao::json::from_string(sendTx(std::string("erc20info ") + token));
         std::cout << "Balance: " << info.at("balance").get_string() << std::endl;
     } else if (args["allowance"].asBool()) {
-        auto info = tao::json::from_string(sendTx(std::string("erc20info ") + args["<token>"].asString() + " " + args["<spender>"].asString()));
+        auto token = lookupAddress(args["<token>"].asString());
+        auto spender = lookupAddress(args["<spender>"].asString());
+
+        auto info = tao::json::from_string(sendTx(std::string("erc20info ") + token + " " + spender));
         std::cout << "Allowance: " << info.at("allowance").get_string() << std::endl;
     } else if (args["approve"].asBool()) {
+        auto token = lookupAddress(args["<token>"].asString());
+        auto spender = lookupAddress(args["<spender>"].asString());
+
         SolidityAbi::Encoder e(SolidityAbi::functionSelector("approve(address,uint256)"));
-        e.addUint256(args["<spender>"].asString());
+        e.addUint256(spender);
         e.addUint256("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         std::string payload = e.finish();
 
-        std::string toHex = args["<token>"].asString();
+        std::string toHex = token;
         std::string valueHex = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
         auto sig = sign(SolidityAbi::numberNormalize(toHex, 20) + SolidityAbi::numberNormalize(valueHex, 32) + payload);

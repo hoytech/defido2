@@ -14,6 +14,7 @@ std::string lookupAddress(std::string spec) {
     if (spec == "weth") return "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
     if (spec == "cdai") return "0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643";
     if (spec == "ceth") return "0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5";
+    if (spec == "uniswap") return "0xf164fC0Ec4E93095b804a4795bBe1e041497b92a"; // uniswap router v2
 
     throw hoytech::error("unable to lookup address: ", spec);
 }
