@@ -18,10 +18,6 @@ extern "C" {
 namespace defido2 {
 
 
-static bool file_exists(std::string &name) {
-    return access(name.c_str(), F_OK) != -1;
-}
-
 
 static const char USAGE[] =
 R"( 
@@ -86,6 +82,7 @@ void cmd_init(const std::vector<std::string> &subArgs) {
 
     config["credId"] = hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(fido_cred_id_ptr(cred)), fido_cred_id_len(cred)), true);
     config["pubKey"] = hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(fido_cred_pubkey_ptr(cred)), fido_cred_pubkey_len(cred)), true);
+    config["device"] = fido2Device;
 
     saveConfig(config);
     std::cout << "Initialized file " << configFile << std::endl;

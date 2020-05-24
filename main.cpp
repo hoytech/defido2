@@ -66,9 +66,12 @@ int parse_command_line(int argc, char **argv) {
 
     if (args["--device"]) {
         fido2Device = args["--device"].asString();
-    } else {
-        fido2Device = "/dev/hidraw1";
+    } else if (file_exists(configFile)) {
+        auto config = loadConfig();
+        if (config.optional<std::string>("device")) fido2Device = config.at("device").get_string();
     }
+
+    if (!fido2Device.size()) fido2Device = "/dev/hidraw1";
 
     std::string command = args["<command>"].asString();
 

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <stdio.h>
+#include <unistd.h>
 
 #include <tao/json.hpp>
 
@@ -19,6 +20,12 @@ namespace defido2 {
 
 extern std::string configFile;
 extern std::string fido2Device;
+
+
+
+static inline bool file_exists(std::string &name) {
+    return access(name.c_str(), F_OK) != -1;
+}
 
 
 

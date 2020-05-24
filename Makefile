@@ -18,6 +18,9 @@ OBJS    := $(SRCS:.cpp=.o)
 CMDOBJS := $(CMDSRCS:.cpp=.o)
 DEPS    := $(SRCS:.cpp=.d) $(CMDSRCS:.cpp=.d)
 
+.PHONY: all clean asan contract
+all: $(BIN) contract
+
 $(BIN): $(OBJS) $(CMDOBJS) $(DEPS)
 	$(CXX) $(OBJS) $(CMDOBJS) $(LDFLAGS) $(LDLIBS) -o $(BIN)
 
@@ -28,7 +31,6 @@ $(BIN): $(OBJS) $(CMDOBJS) $(DEPS)
 
 %.d : ;
 
-.PHONY: clean asan
 clean:
 	rm -f $(BIN) *.o *.d
 	rm -rf build/ package/
@@ -45,3 +47,5 @@ build/Defido2.json: contracts/*.sol
 	mkdir -p build/
 	$(SOLC) --optimize --combined-json abi,bin contracts/Defido2.sol > build/Defido2.json.tmp
 	mv build/Defido2.json.tmp build/Defido2.json
+
+contract: build/Defido2.json
