@@ -16,6 +16,7 @@ void cmd_list(const std::vector<std::string> &subArgs);
 void cmd_add_priv(const std::vector<std::string> &subArgs);
 void cmd_deploy(const std::vector<std::string> &subArgs);
 void cmd_sign(const std::vector<std::string> &subArgs);
+void cmd_eth(const std::vector<std::string> &subArgs);
 void cmd_erc20(const std::vector<std::string> &subArgs);
 
 
@@ -36,7 +37,8 @@ R"(
       add-priv   Adds an ethereum private key for sending transactions
       deploy     Deploy wallet
       sign       Signs a message
-      erc20      ERC20 info
+      eth        ETH operations
+      erc20      ERC20 operations
 )";
 
 
@@ -73,6 +75,8 @@ int parse_command_line(int argc, char **argv) {
         defido2::cmd_deploy(args["<args>"].asStringList());
     } else if (command == "sign") {
         defido2::cmd_sign(args["<args>"].asStringList());
+    } else if (command == "eth") {
+        defido2::cmd_eth(args["<args>"].asStringList());
     } else if (command == "erc20") {
         defido2::cmd_erc20(args["<args>"].asStringList());
     } else {

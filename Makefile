@@ -8,7 +8,7 @@ LDLIBS   = -lfido2 -lcbor -lssl -lcrypto -ldocopt -lgmp -lgmpxx
 LDFLAGS  = -flto $(XLDFLAGS)
 
 SRCS     = main.cpp sign.cpp keccak.cpp external/hoytech-cpp/hex.cpp
-CMDSRCS  = cmd_list.cpp cmd_init.cpp cmd_add_priv.cpp cmd_deploy.cpp cmd_sign.cpp cmd_erc20.cpp
+CMDSRCS  = cmd_list.cpp cmd_init.cpp cmd_add_priv.cpp cmd_deploy.cpp cmd_sign.cpp cmd_eth.cpp cmd_erc20.cpp
 
 BIN      = defido2
 

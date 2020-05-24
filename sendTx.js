@@ -20,6 +20,10 @@ if (!config.privKey) throw("no privkey added");
 
 if (cmd === 'deploy') {
     deploy();
+} else if (cmd === 'ethBalance') {
+    ethBalance();
+} else if (cmd === 'ethDeposit') {
+    ethDeposit();
 } else if (cmd === 'erc20info') {
     erc20info();
 } else if (cmd === 'doSend') {
@@ -50,6 +54,39 @@ async function deploy() {
 
 
 
+async function ethBalance() {
+    let wallet = new ethers.Wallet(config.privKey);
+    let provider = new ethers.providers.JsonRpcProvider();
+    wallet = wallet.connect(provider);
+
+    let output = {};
+
+    output.walletBalance = ethers.utils.formatEther(await provider.getBalance(config.walletAddr));
+    output.senderBalance = ethers.utils.formatEther(await wallet.getBalance());
+
+    console.log(JSON.stringify(output));
+}
+
+
+
+async function ethDeposit() {
+    let value = ethers.utils.parseEther(process.argv[4]);
+
+    let wallet = new ethers.Wallet(config.privKey);
+    let provider = new ethers.providers.JsonRpcProvider();
+    wallet = wallet.connect(provider);
+
+    let txParams = {
+        to: config.walletAddr,
+        value,
+    };
+
+    let tx = await wallet.sendTransaction(txParams);
+    console.error(`Sent tx: ${tx.hash}`);
+
+    let result = await tx.wait();
+    console.error(`Tx mined in block ${result.blockNumber} (${result.blockHash})`);
+}
 
 
 
@@ -71,9 +108,9 @@ async function erc20info() {
 
     let output = {};
 
-    output.balance = (await contract.balanceOf(config.walletAddr)).toString();
+    output.balance = ethers.utils.formatEther(await contract.balanceOf(config.walletAddr));
 
-    if (spender) output.allowance = (await contract.allowance(config.walletAddr, spender)).toString();
+    if (spender) output.allowance = ethers.utils.formatEther(await contract.allowance(config.walletAddr, spender));
 
     console.log(JSON.stringify(output));
 }
@@ -98,7 +135,7 @@ async function doSend() {
     let contract = new ethers.Contract(config.walletAddr, walletAbi, wallet);
     console.error(`Invoking method to=${to} payload=${payload}`);
 
-    let tx = await contract.invoke(to, payload, auth, [sig1, sig2], { gasLimit: 6000000, });
+    let tx = await contract.invoke(to, payload, auth, [sig1, sig2], { gasLimit: 6000000, }); // FIXME: gasLimit because ganache takes too long to estimateGas
     console.error(`Sent tx: ${tx.hash}`);
 
     let result = await tx.wait();

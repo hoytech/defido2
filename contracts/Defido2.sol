@@ -11,6 +11,8 @@ contract Defido2 is EllipticCurve, BaseRelayRecipient {
         pubKey = pubKey_;
     }
 
+    receive() external payable { }
+
     function invoke(address to, bytes memory payload, bytes memory auth, uint[2] memory sig) public {
         bytes32 messageHash = sha256(abi.encodePacked(auth, sha256(abi.encodePacked(to, payload))));
 
