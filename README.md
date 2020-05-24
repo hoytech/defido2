@@ -59,6 +59,34 @@ Send a transaction (permit uniswap to access your wallet's DAI):
     Sent tx: 0x0b392d220de4ec1af0b74c2d745789f4e6ca2f9e56c5e01b2db4566257df6893
     Tx mined in block 10131095 (0x95efeaaebb8b5b4beac06b39d78112689a44030ab1133da1973c85566897cbc9)
 
+## Sub-commands
+
+defido2 uses sub-commands, similar to how `git` does. You can run a sub-command to get its usage information:
+
+    $ ./defido2 
+    Arguments did not match expected patterns
+
+        Usage: defido2 [--config=<config>] [--device=<device>] <command> [<args>...]
+
+        Options:
+          --config=<config>     Config file (default defido2.json)
+          --device=<device>     FIDO2 device (default /dev/hidraw1)
+          -h --help             Show this screen.
+          --version             Show version.
+
+        Commands:
+          list       Lists available fido2 keys
+          init       Inits a key
+          add-priv   Adds an ethereum private key for sending transactions
+          deploy     Deploy wallet
+          sign       Signs a message
+          eth        ETH operations
+          erc20      ERC20 operations
+          compound   Compound operations
+          uniswap    Uniswap operations
+          aave       AAVE operations
+
+
 
 ## Future work
 
