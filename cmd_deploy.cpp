@@ -31,7 +31,7 @@ void cmd_deploy(const std::vector<std::string> &subArgs) {
 
     if (config.optional<std::string>("walletAddr")) throw hoytech::error("Wallet already deployed");
 
-    auto walletAddr = sendTx("deploy");
+    auto walletAddr = sendTx("deploy " + config.at("pubKey").get_string());
     std::cout << "Wallet deployed to " << walletAddr << std::endl;
 
     config["walletAddr"] = walletAddr;

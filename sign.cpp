@@ -9,36 +9,20 @@ extern "C" {
 #include <cbor.h>
 }
 
-#include <docopt/docopt.h>
-
 #include <picosha2.h>
 
 #include "util.h"
+#include "sign.h"
 
 
 namespace defido2 {
 
 
-static const char USAGE[] =
-R"( 
-    Usage:
-      sign <message>
 
-    Options:
-      -h --help             Show this screen.
-      --version             Show version.
-)";
-
-
-
-void cmd_sign(const std::vector<std::string> &subArgs) {
-    std::map<std::string, docopt::value> args = docopt::docopt(USAGE, subArgs, true, "");
-
+SignatureResult sign(std::string_view message) {
     auto config = loadConfig();
 
     std::string credId = hoytech::from_hex(config.at("credId").get_string());
-    std::string message = hoytech::from_hex(args["<message>"].asString());
-
     std::string clientDataHash = sha256(message);
 
 
@@ -86,7 +70,7 @@ void cmd_sign(const std::vector<std::string> &subArgs) {
         authdata_ptr = cbor_bytestring_handle(item);
         authdata_len = cbor_bytestring_length(item);
 
-        std::cout << "auth: " << hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(authdata_ptr), authdata_len), true) << std::endl;
+        //std::cout << "auth: " << hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(authdata_ptr), authdata_len), true) << std::endl;
 
 
         std::string sig(reinterpret_cast<const char *>(fido_assert_sig_ptr(assert, idx)), fido_assert_sig_len(assert, idx));
@@ -94,8 +78,16 @@ void cmd_sign(const std::vector<std::string> &subArgs) {
         size_t xlength = sig[3];
         sig = sig.substr(4);
 
-        std::cout << "sig:  " << hoytech::to_hex(sig.substr(0, xlength), true) << "," << hoytech::to_hex(sig.substr(xlength + 2), true) << std::endl;
+        //std::cout << "sig:  " << hoytech::to_hex(sig.substr(0, xlength), true) << "," << hoytech::to_hex(sig.substr(xlength + 2), true) << std::endl;
+
+        return SignatureResult{
+            std::string(reinterpret_cast<const char *>(authdata_ptr), authdata_len),
+            sig.substr(0, xlength),
+            sig.substr(xlength + 2)
+        };
     }
+
+    throw hoytech::error("couldn't find signature");
 }
 
 

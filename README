@@ -1,5 +1,5 @@
 git submodule update --init
-sudo apt install libfido2-dev libdocopt-dev
+sudo apt install libfido2-dev libdocopt-dev libgmp-dev
 npm i
 
 

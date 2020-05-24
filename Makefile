@@ -4,11 +4,11 @@ STD      = -std=c++17
 CXXFLAGS = $(STD) $(OPT) $(W) -fPIC $(XCXXFLAGS)
 INCS     = -Iinclude -Iexternal -Iexternal/hoytech-cpp -Iexternal/json/include
 
-LDLIBS   = -lfido2 -lcbor -lssl -lcrypto -ldocopt
+LDLIBS   = -lfido2 -lcbor -lssl -lcrypto -ldocopt -lgmp -lgmpxx
 LDFLAGS  = -flto $(XLDFLAGS)
 
-SRCS     = main.cpp external/hoytech-cpp/hex.cpp
-CMDSRCS  = cmd_list.cpp cmd_init.cpp cmd_add_priv.cpp cmd_deploy.cpp cmd_sign.cpp
+SRCS     = main.cpp sign.cpp keccak.cpp external/hoytech-cpp/hex.cpp
+CMDSRCS  = cmd_list.cpp cmd_init.cpp cmd_add_priv.cpp cmd_deploy.cpp cmd_sign.cpp cmd_erc20.cpp
 
 BIN      = defido2
 

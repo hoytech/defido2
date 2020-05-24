@@ -22,6 +22,8 @@ if (cmd === 'deploy') {
     deploy();
 } else if (cmd === 'erc20info') {
     erc20info();
+} else if (cmd === 'doSend') {
+    doSend();
 } else {
     throw("unrecognized command: " + cmd);
 }
@@ -29,6 +31,9 @@ if (cmd === 'deploy') {
 
 
 async function deploy() {
+    let pubKey = process.argv[4];
+    let pubKeySplit = ['0x'+pubKey.slice(2, 66), '0x'+pubKey.slice(-64)];
+
     let wallet = new ethers.Wallet(config.privKey);
     let provider = new ethers.providers.JsonRpcProvider();
     wallet = wallet.connect(provider);
@@ -39,7 +44,7 @@ async function deploy() {
     let contracts = loadContracts();
 
     let factory = new ethers.ContractFactory(contracts.defido2Abi, contracts.defido2Bin, wallet);
-    let defido2Contract = await factory.deploy({ gasLimit: 6000000, });
+    let defido2Contract = await factory.deploy(pubKeySplit, { gasLimit: 6000000, });
     console.log(defido2Contract.address);
 }
 
@@ -71,6 +76,34 @@ async function erc20info() {
     if (spender) output.allowance = (await contract.allowance(config.walletAddr, spender)).toString();
 
     console.log(JSON.stringify(output));
+}
+
+
+
+async function doSend() {
+    let to = process.argv[4];
+    let payload = process.argv[5];
+    let auth = process.argv[6];
+    let sig1 = process.argv[7];
+    let sig2 = process.argv[8];
+
+    const walletAbi = [
+        'function invoke(address to, bytes payload, bytes auth, uint[2] sig)',
+    ];
+
+    let wallet = new ethers.Wallet(config.privKey);
+    let provider = new ethers.providers.JsonRpcProvider();
+    wallet = wallet.connect(provider);
+
+    let contract = new ethers.Contract(config.walletAddr, walletAbi, wallet);
+
+    let tx = await contract.invoke(to, payload, auth, [sig1, sig2]);
+    console.error(tx);
+
+    let result = await tx.wait();
+    console.error(result);
+
+    console.log(result);
 }
 
 
