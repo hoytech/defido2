@@ -8,7 +8,7 @@ LDLIBS   = -lfido2 -lcbor -lssl -lcrypto -ldocopt
 LDFLAGS  = -flto $(XLDFLAGS)
 
 SRCS     = main.cpp external/hoytech-cpp/hex.cpp
-CMDSRCS  = cmd_list.cpp cmd_init.cpp cmd_sign.cpp
+CMDSRCS  = cmd_list.cpp cmd_init.cpp cmd_add_priv.cpp cmd_deploy.cpp cmd_sign.cpp
 
 BIN      = defido2
 
@@ -36,3 +36,12 @@ clean:
 asan: XCXXFLAGS = -fsanitize=address
 asan: XLDFLAGS = -fsanitize=address
 asan: $(BIN)
+
+
+
+SOLC ?= solc
+
+build/Defido2.json: contracts/*.sol
+	mkdir -p build/
+	$(SOLC) --optimize --combined-json abi,bin contracts/Defido2.sol > build/Defido2.json.tmp
+	mv build/Defido2.json.tmp build/Defido2.json

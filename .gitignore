@@ -1,3 +1,7 @@
 *.o
 *.d
 /defido2
+/defido2.json
+/build/
+node_modules
+package-lock.json

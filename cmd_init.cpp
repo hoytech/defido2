@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string_view>
 
-#include <unistd.h> // getpass(), FIXME
+#include <unistd.h>
 #include <sys/random.h>
 
 extern "C" {
@@ -18,13 +18,17 @@ extern "C" {
 namespace defido2 {
 
 
+static bool file_exists(std::string &name) {
+    return access(name.c_str(), F_OK) != -1;
+}
+
+
 static const char USAGE[] =
 R"( 
     Usage:
-      init [--device=<device>]
+      init
 
     Options:
-      --device=<device>     FIDO2 device.
       -h --help             Show this screen.
       --version             Show version.
 )";
@@ -34,8 +38,10 @@ R"(
 void cmd_init(const std::vector<std::string> &subArgs) {
     std::map<std::string, docopt::value> args = docopt::docopt(USAGE, subArgs, true, "");
 
-    std::string device = "/dev/hidraw2";
-    if (args["--device"]) device = args["--device"].asString();
+
+    if (file_exists(configFile)) throw hoytech::error("Config file ", configFile, " already exists, refusing to init");
+    tao::json::value config = tao::json::empty_object;
+
 
     fido_cred_t *cred = nullptr;
     fido_dev_t *dev = nullptr;
@@ -56,12 +62,12 @@ void cmd_init(const std::vector<std::string> &subArgs) {
 
 
     if ((dev = fido_dev_new()) == nullptr) throw hoytech::error("Failed: fido_dev_new:", fido_strerr(r));
-    if ((r = fido_dev_open(dev, device.c_str())) != FIDO_OK) throw hoytech::error("Failed: fido_dev_open(", device, "):", fido_strerr(r));
+    if ((r = fido_dev_open(dev, fido2Device.c_str())) != FIDO_OK) throw hoytech::error("Failed: fido_dev_open(", fido2Device, "):", fido_strerr(r));
 
 
     r = fido_dev_make_cred(dev, cred, nullptr);
     if (r == FIDO_ERR_PIN_REQUIRED) {
-        std::cout << "Enter PIN for " << device << ": " << std::flush;
+        std::cout << "Enter PIN for " << fido2Device << ": " << std::flush;
 
         char *pin = getpass("");
         r = fido_dev_make_cred(dev, cred, pin);
@@ -78,8 +84,11 @@ void cmd_init(const std::vector<std::string> &subArgs) {
     }
 
 
-    std::cout << "cred id: " << hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(fido_cred_id_ptr(cred)), fido_cred_id_len(cred)), true) << std::endl;
-    std::cout << "pub key: " << hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(fido_cred_pubkey_ptr(cred)), fido_cred_pubkey_len(cred)), true) << std::endl;
+    config["credId"] = hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(fido_cred_id_ptr(cred)), fido_cred_id_len(cred)), true);
+    config["pubKey"] = hoytech::to_hex(std::string_view(reinterpret_cast<const char *>(fido_cred_pubkey_ptr(cred)), fido_cred_pubkey_len(cred)), true);
+
+    saveConfig(config);
+    std::cout << "Initialized file " << configFile << std::endl;
 }
 
 

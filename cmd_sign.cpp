@@ -22,10 +22,9 @@ namespace defido2 {
 static const char USAGE[] =
 R"( 
     Usage:
-      sign [--device=<device>] <credId> <message>
+      sign <message>
 
     Options:
-      --device=<device>     FIDO2 device.
       -h --help             Show this screen.
       --version             Show version.
 )";
@@ -35,10 +34,9 @@ R"(
 void cmd_sign(const std::vector<std::string> &subArgs) {
     std::map<std::string, docopt::value> args = docopt::docopt(USAGE, subArgs, true, "");
 
-    std::string device = "/dev/hidraw2";
-    if (args["--device"]) device = args["--device"].asString();
+    auto config = loadConfig();
 
-    std::string credId = hoytech::from_hex(args["<credId>"].asString());
+    std::string credId = hoytech::from_hex(config.at("credId").get_string());
     std::string message = hoytech::from_hex(args["<message>"].asString());
 
     std::string clientDataHash = sha256(message);
@@ -60,10 +58,10 @@ void cmd_sign(const std::vector<std::string> &subArgs) {
 
 
     if ((dev = fido_dev_new()) == nullptr) throw hoytech::error("Failed: fido_dev_new:", fido_strerr(r));
-    if ((r = fido_dev_open(dev, device.c_str())) != FIDO_OK) throw hoytech::error("Failed: fido_dev_open(", device, "):", fido_strerr(r));
+    if ((r = fido_dev_open(dev, fido2Device.c_str())) != FIDO_OK) throw hoytech::error("Failed: fido_dev_open(", fido2Device, "):", fido_strerr(r));
 
 
-    std::cout << "Enter PIN for " << device << ": " << std::flush;
+    std::cout << "Enter PIN for " << fido2Device << ": " << std::flush;
 
     char *pin = getpass("");
     r = fido_dev_get_assert(dev, assert, pin);

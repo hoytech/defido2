@@ -1,2 +1,7 @@
 git submodule update --init
 sudo apt install libfido2-dev libdocopt-dev
+npm i
+
+
+
+./node_modules/.bin/ganache-cli -f https://cloudflare-eth.com -i 999 -m 'relief drive intact sting lion law pizza scan ten genius carry timber'
