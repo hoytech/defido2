@@ -1,8 +1,9 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.6.0;
 
 import "./EllipticCurve.sol";
+import "./opengsn/BaseRelayRecipient.sol";
 
-contract Defido2 is EllipticCurve {
+contract Defido2 is EllipticCurve, BaseRelayRecipient {
     uint[2] pubKey;
     mapping(bytes32 => bool) seenMessages;
 
