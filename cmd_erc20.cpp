@@ -36,26 +36,25 @@ void cmd_erc20(const std::vector<std::string> &subArgs) {
         std::cout << "Balance: " << info.at("balance").get_string() << std::endl;
     } else if (args["allowance"].asBool()) {
         auto info = tao::json::from_string(sendTx(std::string("erc20info ") + args["<token>"].asString() + " " + args["<spender>"].asString()));
-        std::cout << "Balance: " << info.at("balance").get_string() << std::endl;
+        std::cout << "Allowance: " << info.at("allowance").get_string() << std::endl;
     } else if (args["approve"].asBool()) {
         SolidityAbi::Encoder e(SolidityAbi::functionSelector("approve(address,uint256)"));
         e.addUint256(args["<spender>"].asString());
         e.addUint256("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        std::string abiMsg = e.finish();
+        std::string payload = e.finish();
 
-        std::string token = hoytech::from_hex(args["<token>"].asString());
+        std::string to = hoytech::from_hex(args["<token>"].asString());
 
-        auto payload = token + abiMsg;
-        auto sig = sign(payload);
+        auto sig = sign(to + payload);
 
         std::string cmd = "doSend ";
-        cmd += args["<token>"].asString() + " ";
+        cmd += hoytech::to_hex(to, true) + " ";
         cmd += hoytech::to_hex(payload, true) + " ";
         cmd += hoytech::to_hex(sig.auth, true) + " ";
         cmd += hoytech::to_hex(sig.sig1, true) + " ";
         cmd += hoytech::to_hex(sig.sig2, true) + " ";
 
-        std::cout << sendTx(cmd) << std::endl;
+        sendTx(cmd);
     }
 }
 

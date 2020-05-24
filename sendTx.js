@@ -96,12 +96,13 @@ async function doSend() {
     wallet = wallet.connect(provider);
 
     let contract = new ethers.Contract(config.walletAddr, walletAbi, wallet);
+    console.error(`Invoking method to=${to} payload=${payload}`);
 
-    let tx = await contract.invoke(to, payload, auth, [sig1, sig2]);
-    console.error(tx);
+    let tx = await contract.invoke(to, payload, auth, [sig1, sig2], { gasLimit: 6000000, });
+    console.error(`Sent tx: ${tx.hash}`);
 
     let result = await tx.wait();
-    console.error(result);
+    console.error(`Tx mined in block ${result.blockNumber} (${result.blockHash})`);
 
     console.log(result);
 }
