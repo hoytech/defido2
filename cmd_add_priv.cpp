@@ -12,11 +12,13 @@ namespace defido2 {
 static const char USAGE[] =
 R"( 
     Usage:
-      PRIVKEY=0x... add-priv
+      add-priv
 
     Options:
       -h --help             Show this screen.
       --version             Show version.
+
+NOTE: The PRIVKEY environment variable should be set.
 )";
 
 

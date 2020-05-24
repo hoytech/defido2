@@ -7,7 +7,7 @@ INCS     = -Iinclude -Iexternal -Iexternal/hoytech-cpp -Iexternal/json/include
 LDLIBS   = -lfido2 -lcbor -lssl -lcrypto -ldocopt -lgmp -lgmpxx
 LDFLAGS  = -flto $(XLDFLAGS)
 
-SRCS     = main.cpp sign.cpp keccak.cpp external/hoytech-cpp/hex.cpp
+SRCS     = main.cpp sign.cpp keccak.cpp address.cpp external/hoytech-cpp/hex.cpp
 CMDSRCS  = cmd_list.cpp cmd_init.cpp cmd_add_priv.cpp cmd_deploy.cpp cmd_sign.cpp cmd_eth.cpp cmd_erc20.cpp cmd_compound.cpp cmd_uniswap.cpp cmd_aave.cpp
 
 BIN      = defido2

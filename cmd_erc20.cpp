@@ -32,7 +32,8 @@ void cmd_erc20(const std::vector<std::string> &subArgs) {
     auto config = loadConfig();
 
     if (args["balance"].asBool()) {
-        auto info = tao::json::from_string(sendTx(std::string("erc20info ") + args["<token>"].asString()));
+        auto token = lookupAddress(args["<token>"].asString());
+        auto info = tao::json::from_string(sendTx(std::string("erc20info ") + token));
         std::cout << "Balance: " << info.at("balance").get_string() << std::endl;
     } else if (args["allowance"].asBool()) {
         auto info = tao::json::from_string(sendTx(std::string("erc20info ") + args["<token>"].asString() + " " + args["<spender>"].asString()));

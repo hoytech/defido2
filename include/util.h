@@ -56,4 +56,10 @@ static inline void saveConfig(tao::json::value &config) {
     out.close();
 }
 
+
+
+
+std::string lookupAddress(std::string spec);
+
+
 }

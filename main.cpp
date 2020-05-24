@@ -31,7 +31,7 @@ R"(
 
     Options:
       --config=<config>     Config file (default defido2.json)
-      --device=<device>     FIDO2 device (default /dev/hidraw2)
+      --device=<device>     FIDO2 device (default /dev/hidraw1)
       -h --help             Show this screen.
       --version             Show version.
 
@@ -67,7 +67,7 @@ int parse_command_line(int argc, char **argv) {
     if (args["--device"]) {
         fido2Device = args["--device"].asString();
     } else {
-        fido2Device = "/dev/hidraw2";
+        fido2Device = "/dev/hidraw1";
     }
 
     std::string command = args["<command>"].asString();
