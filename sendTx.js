@@ -5,6 +5,8 @@ const fs = require('fs');
 
 
 
+
+
 let configFile = process.argv[2];
 if (!configFile) throw('need configFile');
 let cmd = process.argv[3];
@@ -18,6 +20,8 @@ if (!config.privKey) throw("no privkey added");
 
 if (cmd === 'deploy') {
     deploy();
+} else if (cmd === 'erc20info') {
+    erc20info();
 } else {
     throw("unrecognized command: " + cmd);
 }
@@ -37,6 +41,36 @@ async function deploy() {
     let factory = new ethers.ContractFactory(contracts.defido2Abi, contracts.defido2Bin, wallet);
     let defido2Contract = await factory.deploy({ gasLimit: 6000000, });
     console.log(defido2Contract.address);
+}
+
+
+
+
+
+
+async function erc20info() {
+    let tokenAddr = process.argv[4];
+    let spender = process.argv[5];
+
+    const erc20Abi = [
+        'function totalSupply() view returns (uint)',
+        'function balanceOf(address tokenOwner) view returns (uint)',
+        'function allowance(address tokenOwner, address spender) view returns (uint)',
+        'function transfer(address to, uint tokens) returns (bool)',
+        'function approve(address spender, uint tokens) returns (bool)',
+        'function transferFrom(address from, address to, uint tokens) returns (bool)',
+    ];
+
+    let provider = new ethers.providers.JsonRpcProvider();
+    let contract = new ethers.Contract(tokenAddr, erc20Abi, provider);
+
+    let output = {};
+
+    output.balance = (await contract.balanceOf(config.walletAddr)).toString();
+
+    if (spender) output.allowance = (await contract.allowance(config.walletAddr, spender)).toString();
+
+    console.log(JSON.stringify(output));
 }
 
 
