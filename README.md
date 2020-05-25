@@ -10,6 +10,8 @@ defido2 uses libfido2, so it should support any CTAP2-capable FIDO2 device. We'v
 
 ![Splash Image](defido2.jpg)
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/C3628RNzWRs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 
 ## Install
 
@@ -97,3 +99,5 @@ defido2 uses sub-commands, similar to how `git` does. You can run a sub-command 
 * More DeFi integrations!
 * Since FIDO2 uses secp256r1 signatures, they are expensive to verify within solidity. Each transaction uses about a million gas to verify the signature, which is very expensive and should be improved somehow.
 * Currently we call out to javascript to do some of the JSON-RPC communication. Eventually we'll move the rest of this into C++ and use websockets to talk to the ethereum nodes (this is mostly done in another private project, just need to port it over).
+* Finish support for resident keys, fix support for keys configured without PINs
+* "Multi-sig" contracts so that you require multiple keys, or can have a back-up key in case you lose your main one
