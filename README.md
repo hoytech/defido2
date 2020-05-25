@@ -10,7 +10,7 @@ defido2 uses libfido2, so it should support any CTAP2-capable FIDO2 device. We'v
 
 ![Splash Image](defido2.jpg)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/C3628RNzWRs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![YouTube Video](https://img.youtube.com/vi/C3628RNzWRs/0.jpg)](https://www.youtube.com/watch?v=C3628RNzWRs)
 
 
 ## Install
