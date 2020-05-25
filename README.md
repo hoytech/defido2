@@ -6,6 +6,8 @@ FIDO2 keys are cheap and common, since they are being heavily promoted by google
 
 defido2 uses libfido2, so it should support any CTAP2-capable FIDO2 device. We've tested with 2 models of Yubikey, Solo USB-C, and Solo SOMU. Solos can be purchased for $20 on their web store.
 
+![Splash Image](defido2.jpg)
+
 
 ## Install
 
