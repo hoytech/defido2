@@ -10,8 +10,6 @@ defido2 uses libfido2, so it should support any CTAP2-capable FIDO2 device. We'v
 
 ![Splash Image](defido2.jpg)
 
-[![YouTube Video](https://img.youtube.com/vi/C3628RNzWRs/0.jpg)](https://www.youtube.com/watch?v=C3628RNzWRs)
-
 
 ## Install
 
@@ -91,6 +89,11 @@ defido2 uses sub-commands, similar to how `git` does. You can run a sub-command 
           compound   Compound operations
           uniswap    Uniswap operations
           aave       AAVE operations
+
+
+## YouTube Video
+
+[![YouTube Video](https://img.youtube.com/vi/C3628RNzWRs/0.jpg)](https://www.youtube.com/watch?v=C3628RNzWRs)
 
 
 
