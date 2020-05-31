@@ -16,7 +16,7 @@ defido2 uses libfido2, so it should support any CTAP2-capable FIDO2 device. We'v
 Get pre-requisites:
 
     git submodule update --init
-    sudo apt install -y build-essential libfido2-dev libssl-dev libdocopt-dev libgmp-dev
+    sudo apt install -y build-essential libfido2-dev libssl-dev libdocopt-dev libgmp-dev libcbor-dev
     npm i
     ## Download solc 0.6.x and put in path: https://github.com/ethereum/solidity/releases
 
